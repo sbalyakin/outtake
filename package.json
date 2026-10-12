@@ -105,7 +105,8 @@
     "webpack-cli": "^7.0.0"
   },
   "overrides": {
-    "axios": "$axios"
+    "axios": "$axios",
+    "file-type": "^22.1.1"
   },
   "jest_COMMENTS": {
     "testPathIgnorePatterns": "See https://jestjs.io/docs/configuration#testpathignorepatterns-arraystring . We set it to 1. ignore coverage for deps, and 2. be sure we test the compiled JS, which is in `lib`, not `src` or `dist`",

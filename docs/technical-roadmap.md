@@ -39,6 +39,13 @@ This document records decisions and prerequisites for infrastructure work that s
 - **Major** bumps (e.g. ESLint 10, TypeScript 6, Yargs 18, `webpack-cli` 7): separate PRs with release notes and focused CI.
 - Audit: `npm run list-outdated-deps` (root + `app/`).
 
+### Pinned overrides
+
+`package.json` `overrides` force patched transitive dependencies that `gitcloud` and `page-icon` pin to vulnerable ranges:
+
+- `axios`: `$axios` (root version, 1.x) replaces the 0.21/0.27 copies.
+- `file-type`: `^22.1.1` replaces 16.x (ESM-only, needs Node ≥22.12 `require(esm)`). `page-icon` calls the old `fromBuffer`, so `src/infer/fetchPageIcon.ts` maps it to `fileTypeFromBuffer` inside its child process. `src/infer/fetchPageIcon.test.ts` runs the real chain. Re-check both when bumping or replacing `page-icon`.
+
 ### Recently applied (safe, same major)
 
 - `electron` ^42.2.0 (CLI devDependency + `app/` template)

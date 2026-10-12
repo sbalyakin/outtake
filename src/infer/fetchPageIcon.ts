@@ -12,7 +12,14 @@ export async function fetchPageIcon(
   timeoutMs: number,
 ): Promise<{ ext: string; data: Buffer } | undefined> {
   const pageIconPath = require.resolve('page-icon');
+  // page-icon calls the file-type v16 API `fromBuffer`; file-type >= 17 is ESM-only and exports `fileTypeFromBuffer`.
   const script = `
+    const Module = require('module');
+    const originalRequire = Module.prototype.require;
+    Module.prototype.require = function (id) {
+      const loaded = originalRequire.apply(this, arguments);
+      return id === 'file-type' ? { fromBuffer: loaded.fileTypeFromBuffer } : loaded;
+    };
     const pageIcon = require(${JSON.stringify(pageIconPath)});
     pageIcon(process.argv[1], { ext: process.argv[2] })
       .then((icon) => {
