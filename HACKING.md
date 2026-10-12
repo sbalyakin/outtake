@@ -63,7 +63,7 @@ Post-stabilization infrastructure (ESM path, dependency policy, packager alterna
 First, clone the project:
 
 ```bash
-git clone https://github.com/nativefier/nativefier.git
+git clone https://github.com/sbalyakin/outtake.git
 cd outtake
 ```
 
@@ -85,7 +85,7 @@ Set up a symbolic link so that running `outtake` calls your dev version with you
 ```bash
 npm link
 which outtake
-# -> Should return a path, e.g. /home/youruser/.node_modules/lib/node_modules/nativefier
+# -> Should return a path, e.g. /home/youruser/.node_modules/bin/outtake
 # If not, be sure your `npm_config_prefix` env var is set and in your `PATH`
 ```
 
