@@ -9,5 +9,5 @@ const goToUrlApi = {
   },
 };
 
-contextBridge.exposeInMainWorld('webholmGoToUrl', goToUrlApi);
+contextBridge.exposeInMainWorld('outtakeGoToUrl', goToUrlApi);
 contextBridge.exposeInMainWorld('nativefierGoToUrl', goToUrlApi);

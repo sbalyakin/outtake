@@ -4,13 +4,13 @@ import { AppOptions } from '../../buildTimeContract';
 import { name } from './name';
 
 type OptionPostprocessor = {
-  namespace: 'webholm' | 'packager';
+  namespace: 'outtake' | 'packager';
   option: 'icon' | 'name' | 'userAgent';
   processor: (options: AppOptions) => Promise<string | undefined>;
 };
 
 const OPTION_POSTPROCESSORS: OptionPostprocessor[] = [
-  { namespace: 'webholm', option: 'userAgent', processor: userAgent },
+  { namespace: 'outtake', option: 'userAgent', processor: userAgent },
   { namespace: 'packager', option: 'icon', processor: icon },
   { namespace: 'packager', option: 'name', processor: name },
 ];

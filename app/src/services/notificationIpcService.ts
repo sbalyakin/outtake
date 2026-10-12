@@ -1,8 +1,8 @@
 import { onIpcMainEvent } from '../adapters/ipcAdapter';
 import {
   NOTIFY_IPC_CHANNELS,
-  type WebholmNotifyIpcPayload,
-  type WebholmNotifyOp,
+  type OuttakeNotifyIpcPayload,
+  type OuttakeNotifyOp,
 } from '../preload/notificationChannel';
 import * as log from '../helpers/loggingHelper';
 import { validateToken } from './notificationTokenStore';
@@ -23,7 +23,7 @@ export type NotificationIpcHandlers = {
   onClick?: () => void;
 };
 
-function isValidOp(op: unknown): op is WebholmNotifyOp {
+function isValidOp(op: unknown): op is OuttakeNotifyOp {
   return op === 'create' || op === 'click';
 }
 
@@ -36,7 +36,7 @@ function isJsonSerializable(value: unknown): boolean {
   }
 }
 
-function isValidCreatePayload(msg: WebholmNotifyIpcPayload): boolean {
+function isValidCreatePayload(msg: OuttakeNotifyIpcPayload): boolean {
   if (typeof msg.title !== 'string' || msg.title.length > TITLE_MAX_LENGTH) {
     return false;
   }
@@ -52,9 +52,9 @@ function isValidCreatePayload(msg: WebholmNotifyIpcPayload): boolean {
 
 function handleNotifyMessage(
   event: { sender: { id: number } },
-  msg: WebholmNotifyIpcPayload,
+  msg: OuttakeNotifyIpcPayload,
 ): void {
-  log.debug('ipcMain.webholm-notify', { msg });
+  log.debug('ipcMain.outtake-notify', { msg });
 
   if (
     typeof msg !== 'object' ||
@@ -110,7 +110,7 @@ function ensureIpcHandlerRegistered(): void {
   ipcHandlerRegistered = true;
 
   for (const channel of NOTIFY_IPC_CHANNELS) {
-    onIpcMainEvent(channel, (event, msg: WebholmNotifyIpcPayload) => {
+    onIpcMainEvent(channel, (event, msg: OuttakeNotifyIpcPayload) => {
       handleNotifyMessage(event, msg);
     });
   }

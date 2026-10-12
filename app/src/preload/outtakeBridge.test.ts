@@ -13,7 +13,7 @@ import {
   exposeNativefierBridge,
   sendSessionInteraction,
   setupNativefierBridge,
-} from './webholmBridge';
+} from './outtakeBridge';
 
 const originalContextIsolated = process.contextIsolated;
 const originalWindow = globalThis.window;
@@ -164,7 +164,7 @@ test('exposeNativefierBridge uses contextBridge when isolated', () => {
   const bridge = createNativefierBridge({} as never);
   exposeNativefierBridge(bridge);
 
-  expect(mockExposeInMainWorld).toHaveBeenCalledWith('webholm', bridge);
+  expect(mockExposeInMainWorld).toHaveBeenCalledWith('outtake', bridge);
   expect(mockExposeInMainWorld).toHaveBeenCalledWith('nativefier', bridge);
   expect(mockExposeInMainWorld).not.toHaveBeenCalledWith(
     '__nativefierNotify',

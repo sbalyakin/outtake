@@ -93,7 +93,7 @@ describe('generateMenu', () => {
   test('has Go to URL in the View menu', () => {
     const menu = generateMenu(
       {
-        webholmVersion: '1.0.0',
+        outtakeVersion: '1.0.0',
         zoom: 1.0,
         disableDevTools: false,
       },
@@ -120,7 +120,7 @@ describe('generateMenu', () => {
 
     const menu = generateMenu(
       {
-        webholmVersion: '1.0.0',
+        outtakeVersion: '1.0.0',
         zoom: 1.0,
         disableDevTools: false,
       },
@@ -147,7 +147,7 @@ describe('generateMenu', () => {
 
     const menu = generateMenu(
       {
-        webholmVersion: '1.0.0',
+        outtakeVersion: '1.0.0',
         zoom: 1.0,
         disableDevTools: false,
       },
@@ -177,7 +177,7 @@ describe('generateMenu', () => {
 
       const menu = generateMenu(
         {
-          webholmVersion: '1.0.0',
+          outtakeVersion: '1.0.0',
           zoom: 1.0,
           disableDevTools: false,
         },
@@ -214,7 +214,7 @@ describe('generateMenu', () => {
 
       const menu = generateMenu(
         {
-          webholmVersion: '1.0.0',
+          outtakeVersion: '1.0.0',
           zoom: 1.0,
           disableDevTools: false,
         },
@@ -250,7 +250,7 @@ describe('generateMenu', () => {
 
       const menu = generateMenu(
         {
-          webholmVersion: '1.0.0',
+          outtakeVersion: '1.0.0',
           zoom: 1.0,
           disableDevTools: false,
         },

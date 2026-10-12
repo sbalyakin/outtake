@@ -24,13 +24,13 @@ export interface ElectronPackagerOptions extends Omit<
   targetUrl: string;
   upgrade: boolean;
   upgradeFrom?: string;
-  /** Webholm always uses a single filesystem path for the app icon. */
+  /** Outtake always uses a single filesystem path for the app icon. */
   icon?: string;
 }
 
 export interface AppOptions {
   packager: ElectronPackagerOptions;
-  webholm: {
+  outtake: {
     accessibilityPrompt: boolean;
     alwaysOnTop: boolean;
     backgroundColor?: string;
@@ -63,7 +63,7 @@ export interface AppOptions {
     internalUrls?: string;
     lang?: string;
     maximize: boolean;
-    webholmVersion: string;
+    outtakeVersion: string;
     processEnvs?: string;
     persistSessionCookies: boolean;
     proxyRules?: string;
@@ -112,14 +112,14 @@ export type GlobalShortcut = {
   }[];
 };
 
-export type WebholmOptions = Partial<
-  AppOptions['packager'] & AppOptions['webholm']
+export type OuttakeOptions = Partial<
+  AppOptions['packager'] & AppOptions['outtake']
 >;
 
-/** @deprecated Use {@link WebholmOptions}. */
-export type NativefierOptions = WebholmOptions;
+/** @deprecated Use {@link OuttakeOptions}. */
+export type NativefierOptions = OuttakeOptions;
 
-export type OutputOptions = WebholmOptions & {
+export type OutputOptions = OuttakeOptions & {
   blockExternalUrls: boolean;
   browserwindowOptions?: BrowserWindowOptions;
   buildDate: number;
@@ -129,7 +129,7 @@ export type OutputOptions = WebholmOptions & {
   internalUrls: string | RegExp | undefined;
   isUpgrade: boolean;
   name: string;
-  webholmVersion: string;
+  outtakeVersion: string;
   oldBuildWarningText: string;
   strictInternalUrls: boolean;
   tabbingIdentifier?: string;
@@ -192,8 +192,8 @@ export type RawOptions = {
   minHeight?: number;
   minWidth?: number;
   name?: string;
-  webholmVersion?: string;
-  /** @deprecated Legacy upstream field; use webholmVersion. */
+  outtakeVersion?: string;
+  /** @deprecated Legacy upstream field; use outtakeVersion. */
   nativefierVersion?: string;
   out?: string;
   overwrite?: boolean;

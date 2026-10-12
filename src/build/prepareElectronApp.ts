@@ -13,7 +13,7 @@ import { generateRandomSuffix } from '../helpers/helpers';
 import {
   AppOptions,
   LEGACY_NATIVEFIER_JSON_FILENAME,
-  WEBHOLM_JSON_FILENAME,
+  OUTTAKE_JSON_FILENAME,
   PackageJSON,
 } from '../buildTimeContract';
 import { parseJson } from '../utils/parseUtils';
@@ -34,7 +34,7 @@ async function maybeCopyScripts(
   for (const src of srcs) {
     if (!fs.existsSync(src)) {
       throw new Error(
-        `File ${src} not found. Note that Webholm expects *local* files, not URLs.`,
+        `File ${src} not found. Note that Outtake expects *local* files, not URLs.`,
       );
     }
 
@@ -73,10 +73,10 @@ export function deterministicUrlHash(url: string, length: number): string {
 export function normalizeAppName(appName: string, url: string): string {
   const postFixHash = deterministicUrlHash(url, 6);
   const normalized = normalizeSafeAppName(appName);
-  return `${normalized}-webholm-${postFixHash}`;
+  return `${normalized}-outtake-${postFixHash}`;
 }
 
-const APP_BUNDLE_ID_PREFIX = 'one.hatte.webholm.';
+const APP_BUNDLE_ID_PREFIX = 'one.hatte.outtake.';
 const APP_BUNDLE_ID_SUFFIX_LENGTH = 8;
 
 export function generateAppBundleId(appName: string, url: string): string {
@@ -234,22 +234,22 @@ export async function prepareElectronApp(
     }`;
   }
 
-  const appJsonPath = path.join(dest, WEBHOLM_JSON_FILENAME);
+  const appJsonPath = path.join(dest, OUTTAKE_JSON_FILENAME);
   const pickedOptions = mapAppOptionsToOutputOptions(options);
   log.debug(`Writing app config to ${appJsonPath}`, pickedOptions);
   await fs.writeFile(appJsonPath, JSON.stringify(pickedOptions));
 
-  if (options.webholm.bookmarksMenu) {
+  if (options.outtake.bookmarksMenu) {
     const bookmarksJsonPath = path.join(dest, '/bookmarks.json');
     try {
-      await fs.copy(options.webholm.bookmarksMenu, bookmarksJsonPath);
+      await fs.copy(options.outtake.bookmarksMenu, bookmarksJsonPath);
     } catch (err: unknown) {
       log.error('Error copying bookmarks menu config file.', err);
     }
   }
 
   try {
-    await maybeCopyScripts(options.webholm.inject, dest);
+    await maybeCopyScripts(options.outtake.inject, dest);
   } catch (err: unknown) {
     log.error('Error copying injection files.', err);
   }

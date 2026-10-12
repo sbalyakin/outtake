@@ -8,7 +8,7 @@ export type SessionInteractionResult = {
   error?: Error | { message?: string };
 };
 
-export type WebholmSessionBridge = {
+export type OuttakeSessionBridge = {
   get<T = unknown>(property: string, options?: { id?: string }): Promise<T>;
   set(
     property: string,
@@ -22,20 +22,20 @@ export type WebholmSessionBridge = {
   ): Promise<T>;
 };
 
-export type WebholmBridge = {
-  session: WebholmSessionBridge;
+export type OuttakeBridge = {
+  session: OuttakeSessionBridge;
 };
 
-/** @deprecated Use {@link WebholmSessionBridge}. */
-export type NativefierSessionBridge = WebholmSessionBridge;
+/** @deprecated Use {@link OuttakeSessionBridge}. */
+export type NativefierSessionBridge = OuttakeSessionBridge;
 
-/** @deprecated Use {@link WebholmBridge}. */
-export type NativefierBridge = WebholmBridge;
+/** @deprecated Use {@link OuttakeBridge}. */
+export type NativefierBridge = OuttakeBridge;
 
 let sessionRequestCounter = 0;
 
 function createSessionRequestId(explicit?: string): string {
-  return explicit ?? `webholm-session-${++sessionRequestCounter}`;
+  return explicit ?? `outtake-session-${++sessionRequestCounter}`;
 }
 
 function rejectSessionError(
@@ -85,9 +85,9 @@ export function sendSessionInteraction(
   });
 }
 
-export function createWebholmSessionBridge(
+export function createOuttakeSessionBridge(
   ipcRenderer: IpcRenderer,
-): WebholmSessionBridge {
+): OuttakeSessionBridge {
   return {
     get<T = unknown>(property: string, options?: { id?: string }): Promise<T> {
       return sendSessionInteraction(ipcRenderer, {
@@ -120,54 +120,54 @@ export function createWebholmSessionBridge(
   };
 }
 
-/** @deprecated Use {@link createWebholmSessionBridge}. */
-export const createNativefierSessionBridge = createWebholmSessionBridge;
+/** @deprecated Use {@link createOuttakeSessionBridge}. */
+export const createNativefierSessionBridge = createOuttakeSessionBridge;
 
-export function createWebholmBridge(ipcRenderer: IpcRenderer): WebholmBridge {
+export function createOuttakeBridge(ipcRenderer: IpcRenderer): OuttakeBridge {
   return {
-    session: createWebholmSessionBridge(ipcRenderer),
+    session: createOuttakeSessionBridge(ipcRenderer),
   };
 }
 
-/** @deprecated Use {@link createWebholmBridge}. */
-export const createNativefierBridge = createWebholmBridge;
+/** @deprecated Use {@link createOuttakeBridge}. */
+export const createNativefierBridge = createOuttakeBridge;
 
-export function exposeWebholmBridge(bridge: WebholmBridge): void {
+export function exposeOuttakeBridge(bridge: OuttakeBridge): void {
   if (process.contextIsolated) {
-    contextBridge.exposeInMainWorld('webholm', bridge);
+    contextBridge.exposeInMainWorld('outtake', bridge);
     contextBridge.exposeInMainWorld('nativefier', bridge);
     return;
   }
   const w = window as Window &
     typeof globalThis & {
-      webholm?: WebholmBridge;
-      nativefier?: WebholmBridge;
+      outtake?: OuttakeBridge;
+      nativefier?: OuttakeBridge;
     };
-  w.webholm = bridge;
+  w.outtake = bridge;
   w.nativefier = bridge;
 }
 
-/** @deprecated Use {@link exposeWebholmBridge}. */
-export const exposeNativefierBridge = exposeWebholmBridge;
+/** @deprecated Use {@link exposeOuttakeBridge}. */
+export const exposeNativefierBridge = exposeOuttakeBridge;
 
-export function assignPreloadWebholmGlobal(bridge: WebholmBridge): void {
+export function assignPreloadOuttakeGlobal(bridge: OuttakeBridge): void {
   const g = globalThis as typeof globalThis & {
-    webholm?: WebholmBridge;
-    nativefier?: WebholmBridge;
+    outtake?: OuttakeBridge;
+    nativefier?: OuttakeBridge;
   };
-  g.webholm = bridge;
+  g.outtake = bridge;
   g.nativefier = bridge;
 }
 
-/** @deprecated Use {@link assignPreloadWebholmGlobal}. */
-export const assignPreloadNativefierGlobal = assignPreloadWebholmGlobal;
+/** @deprecated Use {@link assignPreloadOuttakeGlobal}. */
+export const assignPreloadNativefierGlobal = assignPreloadOuttakeGlobal;
 
-export function setupWebholmBridge(ipcRenderer: IpcRenderer): WebholmBridge {
-  const bridge = createWebholmBridge(ipcRenderer);
-  exposeWebholmBridge(bridge);
-  assignPreloadWebholmGlobal(bridge);
+export function setupOuttakeBridge(ipcRenderer: IpcRenderer): OuttakeBridge {
+  const bridge = createOuttakeBridge(ipcRenderer);
+  exposeOuttakeBridge(bridge);
+  assignPreloadOuttakeGlobal(bridge);
   return bridge;
 }
 
-/** @deprecated Use {@link setupWebholmBridge}. */
-export const setupNativefierBridge = setupWebholmBridge;
+/** @deprecated Use {@link setupOuttakeBridge}. */
+export const setupNativefierBridge = setupOuttakeBridge;

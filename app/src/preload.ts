@@ -11,7 +11,7 @@ import { ipcRenderer } from 'electron';
 
 import { injectScripts } from './preload/injectScripts';
 import { setupIpcEvents } from './preload/ipcEvents';
-import { setupWebholmBridge } from './preload/webholmBridge';
+import { setupOuttakeBridge } from './preload/outtakeBridge';
 import { setupNotificationPostMessageBridge } from './preload/notificationPostMessageBridge';
 
 // Built as a single webpack bundle (target electron-preload) so sandbox preload can load it.
@@ -28,6 +28,6 @@ import { setupNotificationPostMessageBridge } from './preload/notificationPostMe
 
 const log = console; // since we can't have `loglevel` here in preload
 
-setupWebholmBridge(ipcRenderer);
+setupOuttakeBridge(ipcRenderer);
 setupNotificationPostMessageBridge(ipcRenderer);
 setupIpcEvents(ipcRenderer, log);

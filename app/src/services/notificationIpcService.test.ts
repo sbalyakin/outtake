@@ -41,7 +41,7 @@ describe('notificationIpcService', () => {
     resetNotificationTokensForTests();
   });
 
-  test('registerNotificationIpcHandlers installs webholm-notify listeners once', () => {
+  test('registerNotificationIpcHandlers installs outtake-notify listeners once', () => {
     registerNotificationIpcHandlers({ onCreate: jest.fn() });
     registerNotificationIpcHandlers({ onClick: jest.fn() });
 

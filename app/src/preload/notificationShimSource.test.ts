@@ -154,3 +154,11 @@ test('buildNotificationShimInstallScript embeds token in IIFE', () => {
     `(${installNotificationShimInPage.toString()})("my-token")`,
   );
 });
+
+test('install script does not close over the compiled module', () => {
+  const source = buildNotificationShimInstallScript('my-token');
+  expect(source).not.toContain('exports.');
+  expect(source).not.toContain('notificationChannel');
+  expect(source).toContain('outtake:notify:v1');
+  expect(source).toContain('nativefier:notify:v1');
+});

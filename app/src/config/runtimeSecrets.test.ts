@@ -8,7 +8,7 @@ import {
 const baseOutput = {
   name: 'TestApp',
   targetUrl: 'https://example.com/',
-  webholmVersion: '54.0.0',
+  outtakeVersion: '54.0.0',
   buildDate: 1,
   blockExternalUrls: false,
   disableDevTools: false,
@@ -38,7 +38,7 @@ test('pickRendererParams omits secrets from spread window options', () => {
     blockExternalUrls: baseOutput.blockExternalUrls,
     autoHideMenuBar: true,
     insecure: false,
-    webholmVersion: baseOutput.webholmVersion,
+    outtakeVersion: baseOutput.outtakeVersion,
     buildDate: baseOutput.buildDate,
     basicAuthPassword: baseOutput.basicAuthPassword,
     basicAuthUsername: baseOutput.basicAuthUsername,
@@ -48,7 +48,7 @@ test('pickRendererParams omits secrets from spread window options', () => {
     name: 'TestApp',
     targetUrl: 'https://example.com/',
     zoom: 1.5,
-    webholmVersion: '54.0.0',
+    outtakeVersion: '54.0.0',
     buildDate: 1,
     autoHideMenuBar: true,
   });

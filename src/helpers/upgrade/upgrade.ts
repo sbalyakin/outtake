@@ -5,8 +5,8 @@ import * as log from 'loglevel';
 
 import {
   LEGACY_NATIVEFIER_JSON_FILENAME,
-  WEBHOLM_JSON_FILENAME,
-  WebholmOptions,
+  OUTTAKE_JSON_FILENAME,
+  OuttakeOptions,
   RawOptions,
 } from '../../buildTimeContract';
 import { normalizeLegacyOutputConfig } from '../../legacyConfig';
@@ -15,18 +15,18 @@ import { extractBoolean, extractString } from './plistInfoXMLHelpers';
 import { getOptionsFromExecutable } from './executableHelpers';
 import { parseJson } from '../../utils/parseUtils';
 
-/** @deprecated Use {@link WebholmOptions}. */
-export type NativefierOptions = WebholmOptions;
+/** @deprecated Use {@link OuttakeOptions}. */
+export type NativefierOptions = OuttakeOptions;
 
 export type UpgradeAppInfo = {
   appResourcesDir: string;
   appRoot: string;
-  options: WebholmOptions;
+  options: OuttakeOptions;
 };
 
 function configExistsInDir(searchDir: string): boolean {
   return (
-    fileExists(path.join(searchDir, WEBHOLM_JSON_FILENAME)) ||
+    fileExists(path.join(searchDir, OUTTAKE_JSON_FILENAME)) ||
     fileExists(path.join(searchDir, LEGACY_NATIVEFIER_JSON_FILENAME))
   );
 }
@@ -52,16 +52,16 @@ function findUpgradeAppResourcesDir(searchDir: string): string | null {
 }
 
 function resolveRuntimeConfigPath(appResourcesDir: string): string {
-  const webholmPath = path.join(appResourcesDir, WEBHOLM_JSON_FILENAME);
-  if (fileExists(webholmPath)) {
-    return webholmPath;
+  const outtakePath = path.join(appResourcesDir, OUTTAKE_JSON_FILENAME);
+  if (fileExists(outtakePath)) {
+    return outtakePath;
   }
   return path.join(appResourcesDir, LEGACY_NATIVEFIER_JSON_FILENAME);
 }
 
 function getAppRoot(
   appResourcesDir: string,
-  options: WebholmOptions,
+  options: OuttakeOptions,
 ): string {
   switch (options.platform) {
     case 'darwin':
@@ -101,8 +101,8 @@ function getIconPath(appResourcesDir: string): string | undefined {
 
 function getInfoPListOptions(
   appResourcesDir: string,
-  priorOptions: WebholmOptions,
-): WebholmOptions {
+  priorOptions: OuttakeOptions,
+): OuttakeOptions {
   if (!fileExists(path.join(appResourcesDir, '..', '..', 'Info.plist'))) {
     return priorOptions;
   }
@@ -190,7 +190,7 @@ export function findUpgradeApp(upgradeFrom: string): UpgradeAppInfo | null {
   const appResourcesDir = findUpgradeAppResourcesDir(searchDir);
   if (appResourcesDir === null) {
     log.debug(
-      `No ${WEBHOLM_JSON_FILENAME} or ${LEGACY_NATIVEFIER_JSON_FILENAME} file found in ${searchDir}`,
+      `No ${OUTTAKE_JSON_FILENAME} or ${LEGACY_NATIVEFIER_JSON_FILENAME} file found in ${searchDir}`,
     );
     return null;
   }
@@ -203,12 +203,12 @@ export function findUpgradeApp(upgradeFrom: string): UpgradeAppInfo | null {
   );
 
   if (!rawConfig) {
-    throw new Error(`Could not read Webholm options from ${configJSONPath}`);
+    throw new Error(`Could not read Outtake options from ${configJSONPath}`);
   }
 
   let options = normalizeLegacyOutputConfig(
     rawConfig,
-  ) as WebholmOptions;
+  ) as OuttakeOptions;
 
   options.electronVersion = undefined;
 

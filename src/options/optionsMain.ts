@@ -36,7 +36,7 @@ export async function getOptions(rawOptions: RawOptions): Promise<AppOptions> {
   assertValidMappedOptions(options);
   warnOnMappedOptions(options);
 
-  if (options.webholm.verbose) {
+  if (options.outtake.verbose) {
     log.setLevel('trace');
     try {
       debug.enable('@electron/packager');
@@ -52,13 +52,13 @@ export async function getOptions(rawOptions: RawOptions): Promise<AppOptions> {
       'Running in verbose mode! This will produce a mountain of logs and',
       'is recommended only for troubleshooting or if you like Shakespeare.',
     );
-  } else if (options.webholm.quiet) {
+  } else if (options.outtake.quiet) {
     log.setLevel('silent');
   } else {
     log.setLevel('info');
   }
 
-  if (options.webholm.widevine) {
+  if (options.outtake.widevine) {
     const widevineSuffix = isElectronMajorBefore16(options)
       ? '-wvvmp'
       : '+wvcus';
@@ -83,12 +83,12 @@ export async function getOptions(rawOptions: RawOptions): Promise<AppOptions> {
     );
   }
 
-  if (options.webholm.flashPluginDir) {
-    options.webholm.insecure = true;
+  if (options.outtake.flashPluginDir) {
+    options.outtake.insecure = true;
   }
 
-  if (options.webholm.userAgentHonest && options.webholm.userAgent) {
-    options.webholm.userAgent = undefined;
+  if (options.outtake.userAgentHonest && options.outtake.userAgent) {
+    options.outtake.userAgent = undefined;
     log.warn(
       `\nATTENTION: user-agent AND user-agent-honest/honest were provided. In this case, honesty wins. user-agent will be ignored`,
     );
@@ -99,19 +99,19 @@ export async function getOptions(rawOptions: RawOptions): Promise<AppOptions> {
   ) as SupportedPlatform;
 
   if (
-    options.webholm.maxWidth &&
-    options.webholm.width &&
-    options.webholm.width > options.webholm.maxWidth
+    options.outtake.maxWidth &&
+    options.outtake.width &&
+    options.outtake.width > options.outtake.maxWidth
   ) {
-    options.webholm.width = options.webholm.maxWidth;
+    options.outtake.width = options.outtake.maxWidth;
   }
 
   if (
-    options.webholm.maxHeight &&
-    options.webholm.height &&
-    options.webholm.height > options.webholm.maxHeight
+    options.outtake.maxHeight &&
+    options.outtake.height &&
+    options.outtake.height > options.outtake.maxHeight
   ) {
-    options.webholm.height = options.webholm.maxHeight;
+    options.outtake.height = options.outtake.maxHeight;
   }
 
   if (options.packager.portable) {
@@ -132,11 +132,11 @@ export async function getOptions(rawOptions: RawOptions): Promise<AppOptions> {
       const globalShortcuts = parseJson<GlobalShortcut[]>(
         fs.readFileSync(rawOptions.globalShortcuts).toString(),
       );
-      options.webholm.globalShortcuts = globalShortcuts;
+      options.outtake.globalShortcuts = globalShortcuts;
     } else {
       // This is an object we got from an existing config in an upgrade
       log.debug('Using global shortcuts object', rawOptions.globalShortcuts);
-      options.webholm.globalShortcuts = rawOptions.globalShortcuts;
+      options.outtake.globalShortcuts = rawOptions.globalShortcuts;
     }
   }
 

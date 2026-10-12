@@ -14,7 +14,7 @@ import {
 export const PLAYWRIGHT_RUNTIME_CONFIG_DEFAULTS = {
   name: 'PlaywrightTest',
   targetUrl: 'about:blank',
-  webholmVersion: '0.0.0-test',
+  outtakeVersion: '0.0.0-test',
   buildDate: recentTestBuildDate(),
   blockExternalUrls: false,
   disableDevTools: false,

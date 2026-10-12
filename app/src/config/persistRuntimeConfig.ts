@@ -13,7 +13,7 @@ export function persistRuntimeConfig(newAppArgs: OutputOptions): void {
     );
   } catch (err: unknown) {
     log.warn(
-      `WARNING: Ignored webholm.json rewrital (${(err as Error).message})`,
+      `WARNING: Ignored outtake.json rewrital (${(err as Error).message})`,
     );
   }
 }

@@ -3,8 +3,8 @@ import type { IpcRenderer } from 'electron';
 import {
   NOTIFY_IPC_CHANNEL,
   NOTIFY_POST_MESSAGE_CHANNELS,
-  type WebholmNotifyIpcPayload,
-  type WebholmNotifyOp,
+  type OuttakeNotifyIpcPayload,
+  type OuttakeNotifyOp,
 } from './notificationChannel';
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -16,7 +16,7 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   );
 }
 
-function isValidOp(op: unknown): op is WebholmNotifyOp {
+function isValidOp(op: unknown): op is OuttakeNotifyOp {
   return op === 'create' || op === 'click';
 }
 
@@ -54,7 +54,7 @@ export function handleNotificationPostMessage(
     }
   }
 
-  const payload: WebholmNotifyIpcPayload = {
+  const payload: OuttakeNotifyIpcPayload = {
     token: data.token,
     op: data.op,
   };

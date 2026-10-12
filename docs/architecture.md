@@ -1,4 +1,4 @@
-# Webholm Architecture
+# Outtake Architecture
 
 This document describes how the repository is split into layers and how configuration flows from the CLI into a packaged desktop app.
 
@@ -7,7 +7,7 @@ This document describes how the repository is split into layers and how configur
 | Layer | Path | Role |
 | --- | --- | --- |
 | **Shared contract** | `shared/src/` | TypeScript types and constants used by both build-time and runtime. No Electron, no filesystem packaging. |
-| **Build-time** | `src/` | CLI (`cli.ts`), option normalization, inference, and the builder (`build/`). Runs on the developer machine when invoking `webholm`. |
+| **Build-time** | `src/` | CLI (`cli.ts`), option normalization, inference, and the builder (`build/`). Runs on the developer machine when invoking `outtake`. |
 | **Runtime template** | `app/src/` | Electron main process, preload, and UI helpers copied into every generated app. Runs inside the packaged app. |
 
 Compiled output mirrors sources: `lib/` (CLI), `app/lib/` + `app/dist/` (runtime bundle), `shared/lib/` (types only, consumed via project references).
@@ -55,17 +55,17 @@ Adapters in `app/src/adapters/`:
 
 Regression check: `rg "from 'electron'" app/src` should list only `adapters/` and `preload/` (not `*.test.ts`; tests use `jest.requireActual('electron')` or adapter mocks).
 
-**Published npm package:** only `lib/` is shipped (see `.npmignore`). `buildTimeContract.ts` inlines `WEBHOLM_JSON_FILENAME` and `LEGACY_NATIVEFIER_JSON_FILENAME` and re-exports types only (erased at compile); it must not `require` `shared/lib` at runtime. Keep those constants in sync with `shared/src/contract.ts`.
+**Published npm package:** only `lib/` is shipped (see `.npmignore`). `buildTimeContract.ts` inlines `OUTTAKE_JSON_FILENAME` and `LEGACY_NATIVEFIER_JSON_FILENAME` and re-exports types only (erased at compile); it must not `require` `shared/lib` at runtime. Keep those constants in sync with `shared/src/contract.ts`.
 
-## Configuration transport: `webholm.json`
+## Configuration transport: `outtake.json`
 
 The only supported channel from builder to packaged app is a JSON file next to the app resources:
 
-- **Constant:** `WEBHOLM_JSON_FILENAME` in `shared/src/contract.ts` and `src/buildTimeContract.ts` (must match; CLI uses the latter in published builds). `LEGACY_NATIVEFIER_JSON_FILENAME` (`nativefier.json`) is still read for apps built before the rename.
+- **Constant:** `OUTTAKE_JSON_FILENAME` in `shared/src/contract.ts` and `src/buildTimeContract.ts` (must match; CLI uses the latter in published builds). `LEGACY_NATIVEFIER_JSON_FILENAME` (`nativefier.json`) is still read for apps built before the rename.
 - **Writer:** `mapAppOptionsToOutputOptions()` in `src/options/outputOptionsMapper.ts` (driven by `OUTPUT_FIELD_MAPPINGS`) writes `OutputOptions` during `prepareElectronApp()`.
-- **Reader:** `app/src/config/loadRuntimeConfig.ts` loads and validates `webholm.json` at startup; components receive `OutputOptions` from `main.ts`.
+- **Reader:** `app/src/config/loadRuntimeConfig.ts` loads and validates `outtake.json` at startup; components receive `OutputOptions` from `main.ts`.
 
-Do not pass new settings across the boundary by importing builder modules into `app/src/`. Add fields to the shared option types, extend `OUTPUT_FIELD_MAPPINGS` (and `optionSchema.ts` for CLI), and read them from `webholm.json` in runtime.
+Do not pass new settings across the boundary by importing builder modules into `app/src/`. Add fields to the shared option types, extend `OUTPUT_FIELD_MAPPINGS` (and `optionSchema.ts` for CLI), and read them from `outtake.json` in runtime.
 
 ## Where to change things
 
@@ -85,7 +85,7 @@ flowchart LR
   Cli["src/cli.ts"] --> Options["src/options/"]
   Options --> AppOptions["AppOptions"]
   AppOptions --> Builder["src/build/"]
-  Builder --> Json["webholm.json"]
+  Builder --> Json["outtake.json"]
   Json --> Main["app/src/main.ts"]
   Main --> Components["app/src/components/"]
 ```
@@ -103,11 +103,11 @@ flowchart TB
     DockBadge["dock badge / counter"]
     InjectCSS["insertCSS + webRequest"]
     LoginIPC["login-message IPC"]
-    NotifIPC["webholm-notify IPC"]
+    NotifIPC["outtake-notify IPC"]
     SessionIPC["session-interaction IPC"]
   end
   subgraph preload [Preload isolated world]
-    Bridge["contextBridge: webholm.session"]
+    Bridge["contextBridge: outtake.session"]
     NotifBridge["postMessage listener"]
     InjectRequire["require user inject.js"]
     PreloadSetup["ipcEvents"]
@@ -131,11 +131,11 @@ flowchart TB
 | Concern | Location | Notes |
 | --- | --- | --- |
 | Default `webPreferences` | `app/src/helpers/windowHelpers.ts` | `preload.js`, secure flags, Flash sandbox exception |
-| User `--inject` | `app/src/preload/injectScripts.ts` | Preload world; use `webholm.session`, not `require('electron')` |
-| Session bridge | `app/src/preload/webholmBridge.ts` | `contextBridge.exposeInMainWorld('webholm', …)`, plus the same bridge as legacy `'nativefier'` |
-| HTTP login popup | `app/src/loginPreload.ts`, `app/src/static/login.js` | Separate window; `webholmLogin.submit` |
+| User `--inject` | `app/src/preload/injectScripts.ts` | Preload world; use `outtake.session`, not `require('electron')` |
+| Session bridge | `app/src/preload/outtakeBridge.ts` | `contextBridge.exposeInMainWorld('outtake', …)`, plus the same bridge as legacy `'nativefier'` |
+| HTTP login popup | `app/src/loginPreload.ts`, `app/src/static/login.js` | Separate window; `outtakeLogin.submit` |
 | Display capture | `app/src/services/displayMediaService.ts` | Main-process handler; picker HTML from `screenSharePicker.ts` |
-| Notifications | `notificationShimSource.ts`, `notificationPostMessageBridge.ts`, `notificationTokenStore.ts`, `notificationIpcService.ts` | Nonce in inject closure; `postMessage` → preload → `webholm-notify`; main validates token and rate-limits badge |
+| Notifications | `notificationShimSource.ts`, `notificationPostMessageBridge.ts`, `notificationTokenStore.ts`, `notificationIpcService.ts` | Nonce in inject closure; `postMessage` → preload → `outtake-notify`; main validates token and rate-limits badge |
 | Renderer params / secrets | `app/src/config/runtimeSecrets.ts`, `persistRuntimeConfig.ts` | Whitelist IPC; strip sensitive keys on disk |
 | Override escape hatch | CLI `browserwindow-options` → `OutputOptions.browserwindowOptions` | Merged last; see [API.md](../API.md#browserwindow-options) |
 

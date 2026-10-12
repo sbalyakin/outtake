@@ -1,7 +1,7 @@
 export {
   LEGACY_NATIVEFIER_JSON_FILENAME,
   NATIVEFIER_JSON_FILENAME,
-  WEBHOLM_JSON_FILENAME,
+  OUTTAKE_JSON_FILENAME,
 } from './contract';
 export {
   BUILDER_INJECTED_OUTPUT_FIELDS,
@@ -10,7 +10,7 @@ export {
   TRAY_VALUES,
   normalizeLegacyOutputConfig,
   validateNativefierJsonContract,
-  validateWebholmJsonContract,
+  validateOuttakeJsonContract,
   type OutputOptionsValidationError,
-} from './contract/webholmJsonContract';
+} from './contract/outtakeJsonContract';
 export * from './options';

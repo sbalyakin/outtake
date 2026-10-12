@@ -9,7 +9,7 @@ export function setupIpcEvents(
   ipcRenderer.on('params', (event, message: string) => {
     log.debug('ipcRenderer.params', { event, message });
     const rendererParams = JSON.parse(message) as RendererParams;
-    log.info('webholm.json', rendererParams);
+    log.info('outtake.json', rendererParams);
   });
 
   ipcRenderer.on('debug', (event, message: string) => {

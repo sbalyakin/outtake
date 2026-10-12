@@ -22,7 +22,7 @@ function makeDarwinOptions(
       dir: '/tmp/template',
       ...overrides,
     },
-    webholm: {},
+    outtake: {},
   } as AppOptions;
 }
 
@@ -48,7 +48,7 @@ describe('applyDarwinPackagerDefaults', () => {
     );
 
     const options = makeDarwinOptions({
-      appBundleId: 'one.hatte.webholm.gmailseb-c57db1d8',
+      appBundleId: 'one.hatte.outtake.gmailseb-c57db1d8',
     });
     applyDarwinPackagerDefaults(src, dest, options);
 
@@ -82,7 +82,7 @@ describe('applyDarwinPackagerDefaults', () => {
   test('no-op on linux', () => {
     const options = {
       packager: { platform: 'linux', dir: '/tmp' },
-      webholm: {},
+      outtake: {},
     } as AppOptions;
     applyDarwinPackagerDefaults(tmpDir, tmpDir, options);
     expect(options.packager.osxSign).toBeUndefined();
@@ -120,7 +120,7 @@ describe('normalizeAppName', () => {
     // at each app regen, thus a different appData folder, which would cause
     // losing user state, including login state through cookies.
     const normalizedTrello = normalizeAppName('Trello', 'https://trello.com');
-    expect(normalizedTrello).toBe('trello-webholm-679e8e');
+    expect(normalizedTrello).toBe('trello-outtake-679e8e');
   });
 });
 
@@ -132,15 +132,15 @@ describe('normalizeSafeAppName', () => {
 });
 
 describe('generateAppBundleId', () => {
-  test('uses one.hatte.webholm prefix with safe name and 8-char url hash', () => {
+  test('uses one.hatte.outtake prefix with safe name and 8-char url hash', () => {
     const bundleId = generateAppBundleId('Trello', 'https://trello.com');
-    expect(bundleId).toBe('one.hatte.webholm.trello-679e8eaa');
+    expect(bundleId).toBe('one.hatte.outtake.trello-679e8eaa');
   });
 
   test('it is stable for the same app name and url', () => {
     const first = generateAppBundleId('GmailSEB', 'https://mail.google.com');
     const second = generateAppBundleId('GmailSEB', 'https://mail.google.com');
     expect(first).toBe(second);
-    expect(first).toBe('one.hatte.webholm.gmailseb-c57db1d8');
+    expect(first).toBe('one.hatte.outtake.gmailseb-c57db1d8');
   });
 });

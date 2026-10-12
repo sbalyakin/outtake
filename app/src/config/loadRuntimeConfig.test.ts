@@ -10,7 +10,7 @@ import { stripSensitiveOutputOptions } from './runtimeSecrets';
 const validJson = JSON.stringify({
   name: 'TestApp',
   targetUrl: 'https://example.com/',
-  webholmVersion: '54.0.0',
+  outtakeVersion: '54.0.0',
   buildDate: STABLE_CONTRACT_TEST_BUILD_DATE,
   blockExternalUrls: false,
   disableDevTools: false,
@@ -61,7 +61,7 @@ test('applyCommandLineTargetUrlOverride keeps config when argv url invalid', () 
 });
 
 test('parseRuntimeConfigJson throws on invalid config', () => {
-  expect(() => parseRuntimeConfigJson('{}')).toThrow(/Invalid webholm\.json/);
+  expect(() => parseRuntimeConfigJson('{}')).toThrow(/Invalid outtake\.json/);
 });
 
 test('stripSensitiveOutputOptions keeps parsed config except secrets', () => {
@@ -78,7 +78,7 @@ test('stripSensitiveOutputOptions keeps parsed config except secrets', () => {
   expect(stripped.processEnvs).toBeUndefined();
 });
 
-test('parseRuntimeConfigJson maps legacy nativefierVersion to webholmVersion', () => {
+test('parseRuntimeConfigJson maps legacy nativefierVersion to outtakeVersion', () => {
   const config = parseRuntimeConfigJson(
     JSON.stringify({
       name: 'LegacyApp',
@@ -92,7 +92,7 @@ test('parseRuntimeConfigJson maps legacy nativefierVersion to webholmVersion', (
       oldBuildWarningText: '',
     }),
   );
-  expect(config.webholmVersion).toBe('50.0.0');
+  expect(config.outtakeVersion).toBe('50.0.0');
 });
 
 test('parseRuntimeConfigJson merges playwright defaults when requested', () => {
@@ -102,7 +102,7 @@ test('parseRuntimeConfigJson merges playwright defaults when requested', () => {
   );
   expect(config.name).toBe('PlaywrightTest');
   expect(config.targetUrl).toBe('https://example.com/');
-  expect(config.webholmVersion).toBe('0.0.0-test');
+  expect(config.outtakeVersion).toBe('0.0.0-test');
   expect(config.disableOldBuildWarning).toBe(true);
   const ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
   expect(Date.now() - config.buildDate).toBeLessThan(ninetyDaysMs);

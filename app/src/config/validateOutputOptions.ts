@@ -1,12 +1,12 @@
 import type { OutputOptions } from '../../../shared/src/options/model';
 import {
   normalizeLegacyOutputConfig,
-  validateWebholmJsonContract,
+  validateOuttakeJsonContract,
   type OutputOptionsValidationError,
-} from '../../../shared/lib/src/contract/webholmJsonContract';
+} from '../../../shared/lib/src/contract/outtakeJsonContract';
 import {
   LEGACY_NATIVEFIER_JSON_FILENAME,
-  WEBHOLM_JSON_FILENAME,
+  OUTTAKE_JSON_FILENAME,
 } from './runtimeConfigPath';
 
 export type { OutputOptionsValidationError };
@@ -14,7 +14,7 @@ export type { OutputOptionsValidationError };
 export function validateOutputOptions(
   value: unknown,
 ): OutputOptionsValidationError[] {
-  return validateWebholmJsonContract(value);
+  return validateOuttakeJsonContract(value);
 }
 
 export function assertValidOutputOptions(
@@ -24,7 +24,7 @@ export function assertValidOutputOptions(
   if (errors.length > 0) {
     const detail = errors.map((e) => `${e.field}: ${e.message}`).join('; ');
     throw new Error(
-      `Invalid ${WEBHOLM_JSON_FILENAME} (or legacy ${LEGACY_NATIVEFIER_JSON_FILENAME}): ${detail}`,
+      `Invalid ${OUTTAKE_JSON_FILENAME} (or legacy ${LEGACY_NATIVEFIER_JSON_FILENAME}): ${detail}`,
     );
   }
 }

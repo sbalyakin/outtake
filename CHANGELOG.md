@@ -1,17 +1,17 @@
 
-## Unreleased (Webholm fork)
+## Unreleased (Outtake fork)
 
 ### Pin on Top
 
-- Added a **Pin on Top** checkbox to the View menu (`Cmd+Shift+P` / `Ctrl+Shift+P`) to toggle always-on-top at runtime, independent of the `--always-on-top` build flag. The chosen state is persisted to `webholm.json` and used as the default on the next launch. The checkbox resyncs to the focused window's own state on every window focus change, since the app menu is shared across windows.
+- Added a **Pin on Top** checkbox to the View menu (`Cmd+Shift+P` / `Ctrl+Shift+P`) to toggle always-on-top at runtime, independent of the `--always-on-top` build flag. The chosen state is persisted to `outtake.json` and used as the default on the next launch. The checkbox resyncs to the focused window's own state on every window focus change, since the app menu is shared across windows.
 
-### Rebrand: Nativefier → Webholm
+### Rebrand: Nativefier → Outtake
 
-- **Webholm** is a fork of [Nativefier](https://github.com/nativefier/nativefier), maintained independently.
-- CLI / npm package renamed to `webholm` (`buildWebholmApp`; deprecated `buildNativefierApp` alias).
-- Runtime config file: `webholm.json` (`webholmVersion`). Legacy `nativefier.json` / `nativefierVersion` still read for upgrade.
-- Preload bridge: `window.webholm` (legacy `window.nativefier` dual-exposed). IPC: `webholm-notify` (legacy `nativefier-notify` still handled).
-- Bundle ID for new builds: `one.hatte.webholm.<safe-app-name>-<8-char-url-hash>`. App slug suffix: `-webholm-{hash}`.
+- **Outtake** is a fork of [Nativefier](https://github.com/nativefier/nativefier), maintained independently.
+- CLI / npm package renamed to `outtake` (`buildOuttakeApp`; deprecated `buildNativefierApp` alias).
+- Runtime config file: `outtake.json` (`outtakeVersion`). Legacy `nativefier.json` / `nativefierVersion` still read for upgrade.
+- Preload bridge: `window.outtake` (legacy `window.nativefier` dual-exposed). IPC: `outtake-notify` (legacy `nativefier-notify` still handled).
+- Bundle ID for new builds: `one.hatte.outtake.<safe-app-name>-<8-char-url-hash>`. App slug suffix: `-outtake-{hash}`.
 
 54.0.0 / 2026-05-20
 ===================

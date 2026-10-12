@@ -15,7 +15,7 @@ const mockWriteFileSync = fs.writeFileSync as jest.MockedFunction<
 const baseOutput = {
   name: 'TestApp',
   targetUrl: 'https://example.com/',
-  webholmVersion: '54.0.0',
+  outtakeVersion: '54.0.0',
   buildDate: 1,
   blockExternalUrls: false,
   disableDevTools: false,

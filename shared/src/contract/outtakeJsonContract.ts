@@ -1,10 +1,10 @@
 import type { TrayValue } from '../options/model';
 
-/** Fields the runtime loader requires in every packaged {@link WEBHOLM_JSON_FILENAME}. */
+/** Fields the runtime loader requires in every packaged {@link OUTTAKE_JSON_FILENAME}. */
 export const RUNTIME_REQUIRED_STRING_FIELDS = [
   'name',
   'targetUrl',
-  'webholmVersion',
+  'outtakeVersion',
 ] as const;
 
 export const RUNTIME_REQUIRED_BOOLEAN_FIELDS = [
@@ -14,7 +14,7 @@ export const RUNTIME_REQUIRED_BOOLEAN_FIELDS = [
   'strictInternalUrls',
 ] as const;
 
-/** Fields the builder always injects when writing webholm.json (not from OUTPUT_FIELD_MAPPINGS). */
+/** Fields the builder always injects when writing outtake.json (not from OUTPUT_FIELD_MAPPINGS). */
 export const BUILDER_INJECTED_OUTPUT_FIELDS = [
   'buildDate',
   'name',
@@ -33,7 +33,7 @@ export type OutputOptionsValidationError = {
 };
 
 /**
- * Maps legacy upstream Nativefier config fields into Webholm shape before validation.
+ * Maps legacy upstream Nativefier config fields into Outtake shape before validation.
  */
 export function normalizeLegacyOutputConfig(
   value: unknown,
@@ -43,13 +43,13 @@ export function normalizeLegacyOutputConfig(
   }
   const record = { ...(value as Record<string, unknown>) };
   if (
-    (record.webholmVersion === undefined ||
-      (typeof record.webholmVersion === 'string' &&
-        record.webholmVersion.length === 0)) &&
+    (record.outtakeVersion === undefined ||
+      (typeof record.outtakeVersion === 'string' &&
+        record.outtakeVersion.length === 0)) &&
     typeof record.nativefierVersion === 'string' &&
     record.nativefierVersion.length > 0
   ) {
-    record.webholmVersion = record.nativefierVersion;
+    record.outtakeVersion = record.nativefierVersion;
   }
   return record;
 }
@@ -58,7 +58,7 @@ export function normalizeLegacyOutputConfig(
  * Validates the JSON shape written by the builder and read at runtime.
  * Shared so build-time and runtime contract tests use one ruleset.
  */
-export function validateWebholmJsonContract(
+export function validateOuttakeJsonContract(
   value: unknown,
 ): OutputOptionsValidationError[] {
   const record = normalizeLegacyOutputConfig(value);
@@ -125,9 +125,9 @@ export function validateWebholmJsonContract(
   return errors;
 }
 
-/** @deprecated Use {@link validateWebholmJsonContract}. */
+/** @deprecated Use {@link validateOuttakeJsonContract}. */
 export function validateNativefierJsonContract(
   value: unknown,
 ): OutputOptionsValidationError[] {
-  return validateWebholmJsonContract(value);
+  return validateOuttakeJsonContract(value);
 }

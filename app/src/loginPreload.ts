@@ -6,5 +6,5 @@ const loginApi = {
   },
 };
 
-contextBridge.exposeInMainWorld('webholmLogin', loginApi);
+contextBridge.exposeInMainWorld('outtakeLogin', loginApi);
 contextBridge.exposeInMainWorld('nativefierLogin', loginApi);

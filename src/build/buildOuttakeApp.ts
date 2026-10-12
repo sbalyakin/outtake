@@ -10,7 +10,7 @@ import { prepareAssets } from './pipeline/prepareAssets';
 import { prepareTemplate } from './pipeline/prepareTemplate';
 import { resolveBuildOptions } from './pipeline/resolveBuildOptions';
 
-export async function buildWebholmApp(
+export async function buildOuttakeApp(
   rawOptions: RawOptions,
 ): Promise<string> {
   log.info('Reading build options...');
@@ -33,9 +33,9 @@ export async function buildWebholmApp(
   return await finalizeBuild(appPath, options);
 }
 
-/** @deprecated Use {@link buildWebholmApp}. */
+/** @deprecated Use {@link buildOuttakeApp}. */
 export async function buildNativefierApp(
   rawOptions: RawOptions,
 ): Promise<string> {
-  return buildWebholmApp(rawOptions);
+  return buildOuttakeApp(rawOptions);
 }

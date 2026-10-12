@@ -42,7 +42,7 @@ const isWindowsAdminMock = isWindowsAdmin as jest.MockedFunction<
 function makeAppOptions(platform: string): AppOptions {
   return {
     packager: { platform },
-    webholm: { verbose: false },
+    outtake: { verbose: false },
   } as AppOptions;
 }
 

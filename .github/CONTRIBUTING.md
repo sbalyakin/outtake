@@ -1,13 +1,13 @@
-# Contributing to Webholm
+# Contributing to Outtake
 
 ## Issues
 
 Please include the following in your new issue:
 
-- Version of Nativefier (run `$ webholm --version`)
+- Version of Nativefier (run `$ outtake --version`)
 - Version of Node.js (run `$ node --version`)
 - Command line parameters
-- OS and architecture you are running Webholm from
+- OS and architecture you are running Outtake from
 - Stack trace from the error message (if any)
 - Instructions to reproduce the issue
 

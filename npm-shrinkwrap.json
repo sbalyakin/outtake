@@ -1,11 +1,11 @@
 {
-  "name": "webholm",
+  "name": "outtake",
   "version": "54.0.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
-      "name": "webholm",
+      "name": "outtake",
       "version": "54.0.0",
       "license": "MIT",
       "dependencies": {
@@ -24,7 +24,7 @@
         "yargs": "^18.0.0"
       },
       "bin": {
-        "webholm": "lib/cli.js"
+        "outtake": "lib/cli.js"
       },
       "devDependencies": {
         "@eslint/js": "^10.0.0",

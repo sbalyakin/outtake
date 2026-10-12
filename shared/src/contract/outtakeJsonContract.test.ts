@@ -2,14 +2,14 @@ import {
   BUILDER_INJECTED_OUTPUT_FIELDS,
   RUNTIME_REQUIRED_BOOLEAN_FIELDS,
   RUNTIME_REQUIRED_STRING_FIELDS,
-  validateWebholmJsonContract,
-} from './webholmJsonContract';
+  validateOuttakeJsonContract,
+} from './outtakeJsonContract';
 import { STABLE_CONTRACT_TEST_BUILD_DATE } from './testFixtures';
 
 const validConfig = {
   name: 'TestApp',
   targetUrl: 'https://example.com/',
-  webholmVersion: '54.0.0',
+  outtakeVersion: '54.0.0',
   buildDate: STABLE_CONTRACT_TEST_BUILD_DATE,
   blockExternalUrls: false,
   disableDevTools: false,
@@ -18,26 +18,26 @@ const validConfig = {
   oldBuildWarningText: '',
 };
 
-test('validateWebholmJsonContract accepts minimal valid config', () => {
-  expect(validateWebholmJsonContract(validConfig)).toEqual([]);
+test('validateOuttakeJsonContract accepts minimal valid config', () => {
+  expect(validateOuttakeJsonContract(validConfig)).toEqual([]);
 });
 
-test('validateWebholmJsonContract rejects non-object root', () => {
-  const errors = validateWebholmJsonContract(null);
+test('validateOuttakeJsonContract rejects non-object root', () => {
+  const errors = validateOuttakeJsonContract(null);
   expect(errors).toHaveLength(1);
   expect(errors[0].message).toContain('JSON object');
 });
 
-test('validateWebholmJsonContract rejects invalid targetUrl', () => {
-  const errors = validateWebholmJsonContract({
+test('validateOuttakeJsonContract rejects invalid targetUrl', () => {
+  const errors = validateOuttakeJsonContract({
     ...validConfig,
     targetUrl: 'not-a-url',
   });
   expect(errors.some((e) => e.field === 'targetUrl')).toBe(true);
 });
 
-test('validateWebholmJsonContract rejects invalid tray', () => {
-  const errors = validateWebholmJsonContract({
+test('validateOuttakeJsonContract rejects invalid tray', () => {
+  const errors = validateOuttakeJsonContract({
     ...validConfig,
     tray: 'maybe',
   });

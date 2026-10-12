@@ -3,35 +3,25 @@
  * Must not close over module scope in {@link installNotificationShimInPage}.
  */
 
-import {
-  LEGACY_NOTIFY_POST_MESSAGE_CHANNEL,
-  NOTIFY_POST_MESSAGE_CHANNEL,
-} from './notificationChannel';
-
 export const NOTIFICATION_SHIM_INSTALLED_KEY =
-  '__webholmNotificationShimInstalled';
+  '__outtakeNotificationShimInstalled';
 
 /** Legacy upstream key; still checked for dual-read compatibility. */
 export const LEGACY_NOTIFICATION_SHIM_INSTALLED_KEY =
   '__nativefierNotificationShimInstalled';
 
-const NOTIFICATION_SHIM_TOKEN_KEY = '__webholmShimToken';
-const LEGACY_NOTIFICATION_SHIM_TOKEN_KEY = '__nativefierShimToken';
-const ORIGINAL_NOTIFICATION_KEY = '__webholmOriginalNotification';
-const LEGACY_ORIGINAL_NOTIFICATION_KEY = '__nativefierOriginalNotification';
-
-export type WebholmNotifySend = (
+export type OuttakeNotifySend = (
   op: 'create' | 'click',
   title?: string,
   opt?: NotificationOptions,
 ) => void;
 
-/** @deprecated Use {@link WebholmNotifySend}. */
-export type NativefierNotifySend = WebholmNotifySend;
+/** @deprecated Use {@link OuttakeNotifySend}. */
+export type NativefierNotifySend = OuttakeNotifySend;
 
 export function wrapNotificationConstructor(
   OldNotify: typeof Notification,
-  sendNotify: WebholmNotifySend,
+  sendNotify: OuttakeNotifySend,
 ): typeof Notification {
   const newNotify = function (
     title: string,
@@ -53,69 +43,69 @@ export function wrapNotificationConstructor(
 }
 
 /**
- * Runs in the page main world. Token is passed only via IIFE argument, not on `window`.
+ * Runs in the page main world via `Function.prototype.toString`.
+ * The body must not mention module bindings. tsc rewrites references to
+ * exported consts as `exports.*`, and those names do not exist in the page.
  */
 export function installNotificationShimInPage(token: string): void {
-  const w = window as Window &
-    typeof globalThis & {
-      [NOTIFICATION_SHIM_INSTALLED_KEY]?: boolean;
-      [LEGACY_NOTIFICATION_SHIM_INSTALLED_KEY]?: boolean;
-      [NOTIFICATION_SHIM_TOKEN_KEY]?: string;
-      [LEGACY_NOTIFICATION_SHIM_TOKEN_KEY]?: string;
-      [ORIGINAL_NOTIFICATION_KEY]?: typeof Notification;
-      [LEGACY_ORIGINAL_NOTIFICATION_KEY]?: typeof Notification;
-    };
+  const installedKey = '__outtakeNotificationShimInstalled';
+  const legacyInstalledKey = '__nativefierNotificationShimInstalled';
+  const tokenKey = '__outtakeShimToken';
+  const legacyTokenKey = '__nativefierShimToken';
+  const originalKey = '__outtakeOriginalNotification';
+  const legacyOriginalKey = '__nativefierOriginalNotification';
+  const channel = 'outtake:notify:v1';
+  const legacyChannel = 'nativefier:notify:v1';
+
+  const w = window as Window & typeof globalThis & Record<string, unknown>;
 
   const installed =
-    (w[NOTIFICATION_SHIM_INSTALLED_KEY] &&
-      w[NOTIFICATION_SHIM_TOKEN_KEY] === token) ||
-    (w[LEGACY_NOTIFICATION_SHIM_INSTALLED_KEY] &&
-      w[LEGACY_NOTIFICATION_SHIM_TOKEN_KEY] === token);
+    (w[installedKey] && w[tokenKey] === token) ||
+    (w[legacyInstalledKey] && w[legacyTokenKey] === token);
   if (installed) {
     return;
   }
 
-  const OldNotify = (w[ORIGINAL_NOTIFICATION_KEY] ??
-    w[LEGACY_ORIGINAL_NOTIFICATION_KEY] ??
+  const OldNotify = (w[originalKey] ??
+    w[legacyOriginalKey] ??
     window.Notification) as typeof Notification;
-  if (!w[ORIGINAL_NOTIFICATION_KEY]) {
-    w[ORIGINAL_NOTIFICATION_KEY] = OldNotify;
+  if (!w[originalKey]) {
+    w[originalKey] = OldNotify;
   }
-  if (!w[LEGACY_ORIGINAL_NOTIFICATION_KEY]) {
-    w[LEGACY_ORIGINAL_NOTIFICATION_KEY] = OldNotify;
+  if (!w[legacyOriginalKey]) {
+    w[legacyOriginalKey] = OldNotify;
   }
 
-  const sendNotify: WebholmNotifySend = (op, title?, opt?) => {
-    window.postMessage(
-      {
-        channel: NOTIFY_POST_MESSAGE_CHANNEL,
-        token,
-        op,
-        title,
-        opt,
-      },
-      '*',
-    );
-    window.postMessage(
-      {
-        channel: LEGACY_NOTIFY_POST_MESSAGE_CHANNEL,
-        token,
-        op,
-        title,
-        opt,
-      },
-      '*',
-    );
+  const sendNotify = (
+    op: 'create' | 'click',
+    title?: string,
+    opt?: NotificationOptions,
+  ): void => {
+    window.postMessage({ channel, token, op, title, opt }, '*');
+    window.postMessage({ channel: legacyChannel, token, op, title, opt }, '*');
   };
 
-  window.Notification = wrapNotificationConstructor(
-    OldNotify,
-    sendNotify,
-  ) as typeof Notification;
-  w[NOTIFICATION_SHIM_INSTALLED_KEY] = true;
-  w[NOTIFICATION_SHIM_TOKEN_KEY] = token;
-  w[LEGACY_NOTIFICATION_SHIM_INSTALLED_KEY] = true;
-  w[LEGACY_NOTIFICATION_SHIM_TOKEN_KEY] = token;
+  const newNotify = function (
+    title: string,
+    opt: NotificationOptions,
+  ): Notification {
+    sendNotify('create', title, opt);
+    const instance = new OldNotify(title, opt);
+    instance.addEventListener('click', () => {
+      sendNotify('click');
+    });
+    return instance;
+  };
+  newNotify.requestPermission = OldNotify.requestPermission.bind(OldNotify);
+  Object.defineProperty(newNotify, 'permission', {
+    get: () => OldNotify.permission,
+  });
+
+  window.Notification = newNotify as unknown as typeof Notification;
+  w[installedKey] = true;
+  w[tokenKey] = token;
+  w[legacyInstalledKey] = true;
+  w[legacyTokenKey] = token;
 }
 
 export function buildNotificationShimInstallScript(token: string): string {

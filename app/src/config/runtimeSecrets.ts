@@ -1,6 +1,6 @@
 import type { OutputOptions, WindowOptions } from '../runtimeContract';
 
-/** Keys that must not reach renderer IPC or rewritten webholm.json on disk. */
+/** Keys that must not reach renderer IPC or rewritten outtake.json on disk. */
 export const SENSITIVE_OUTPUT_OPTION_KEYS = [
   'basicAuthPassword',
   'basicAuthUsername',
@@ -24,7 +24,7 @@ export type RendererParams = Pick<
   | 'internalUrls'
   | 'tabbingIdentifier'
 > & {
-  webholmVersion?: string;
+  outtakeVersion?: string;
   buildDate?: number;
 };
 
@@ -39,7 +39,7 @@ const RENDERER_PARAM_KEYS: (keyof RendererParams)[] = [
   'userAgent',
   'internalUrls',
   'tabbingIdentifier',
-  'webholmVersion',
+  'outtakeVersion',
   'buildDate',
 ];
 

@@ -7,7 +7,7 @@ import {
 const validConfig = {
   name: 'TestApp',
   targetUrl: 'https://example.com/',
-  webholmVersion: '54.0.0',
+  outtakeVersion: '54.0.0',
   buildDate: STABLE_CONTRACT_TEST_BUILD_DATE,
   blockExternalUrls: false,
   disableDevTools: false,

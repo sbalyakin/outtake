@@ -12,7 +12,7 @@
 
 `docs/` is the project knowledge base. It holds what the code does not show on its own: layer boundaries, contracts, data flow, testing strategy, and decisions with their reasons.
 
-- `docs/architecture.md`: layers, import rules, Electron adapters, `webholm.json` transport, where to change things, secure renderer.
+- `docs/architecture.md`: layers, import rules, Electron adapters, `outtake.json` transport, where to change things, secure renderer.
 - `docs/testing.md`: test layers, what each layer catches, commands.
 - `docs/technical-roadmap.md`: ESM, dependency, packager, and native tooling decisions.
 - `HACKING.md`: setup, dev workflow, maintainer procedures.
